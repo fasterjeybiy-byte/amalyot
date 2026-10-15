@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="SOMFLOW — mashhur xorijiy valyutalarni o‘zbek so‘miga konvertatsiya qilish.">
+<title>SOMFLOW — Valyuta konvertori</title>
+<style>
+:root{color-scheme:dark;--bg:#080c17;--panel:#101729;--panel2:#151f34;--line:#26324a;--text:#f3f6ff;--muted:#94a3bd;--accent:#7c9cff;--green:#58d6a5}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 15% 0%,#172443 0,transparent 42%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{width:min(1040px,92%);margin:auto;padding:34px 0 42px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:42px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:1.8px;font-size:20px}.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#8aa8ff,#536ee8);color:white;font-size:20px;box-shadow:0 8px 30px #536ee833}
+.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;background:#111a2b;border:1px solid var(--line);padding:9px 12px;border-radius:30px}.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px #58d6a5aa}
+.hero{text-align:center;margin-bottom:30px}.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,49px);letter-spacing:-1.7px;line-height:1.1;margin:13px 0}.hero p{color:var(--muted);margin:0;font-size:15px}
+.layout{display:grid;grid-template-columns:1.08fr .92fr;gap:18px}.card{background:linear-gradient(145deg,#121b2e,#0e1525);border:1px solid var(--line);border-radius:24px;padding:25px;box-shadow:0 18px 60px #00000022}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.card-head h2{font-size:16px;margin:0}.tag{font-size:11px;color:#b5c5ff;background:#202c4b;padding:7px 10px;border-radius:8px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:9px}.amount{width:100%;border:1px solid var(--line);background:#0a1120;color:var(--text);border-radius:14px;padding:17px 15px;font-size:27px;font-weight:650;outline:none;transition:.2s}.amount:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #7c9cff1a}
+.currency-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-top:20px}.select-wrap{position:relative}select{appearance:none;width:100%;border:1px solid var(--line);background:#0a1120;color:var(--text);border-radius:13px;padding:15px 36px 15px 13px;font-size:14px;outline:none;cursor:pointer} .select-wrap:after{content:"⌄";position:absolute;right:14px;top:10px;color:var(--muted);pointer-events:none;font-size:20px}
+.swap{border:1px solid var(--line);background:var(--panel2);color:var(--accent);height:48px;width:48px;border-radius:14px;font-size:21px;cursor:pointer}.swap:hover{background:#243453}
+.result{margin-top:22px;padding:22px;border-radius:17px;border:1px solid #33456a;background:linear-gradient(135deg,#172644,#121b30)}.result-label{font-size:12px;color:#aebbd2}.result-value{font-size:clamp(27px,4vw,37px);font-weight:800;letter-spacing:-1px;margin:8px 0 4px;overflow-wrap:anywhere}.result-value span{font-size:16px;color:#c4d0e8;letter-spacing:0}.result-note{font-size:11px;color:var(--muted)}
+.info-title{font-size:15px;margin:0 0 16px}.rate-list{display:flex;flex-direction:column;gap:2px}.rate{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #222d42}.rate:last-child{border-bottom:0}.flag{display:grid;place-items:center;width:38px;height:38px;background:#1a2540;border:1px solid #2a3856;border-radius:12px;font-size:19px}.rate-name{font-size:13px;font-weight:650}.rate-code{font-size:11px;color:var(--muted);margin-top:3px}.rate-value{text-align:right;font-size:13px;font-weight:700}.rate-change{font-size:10px;color:var(--muted);margin-top:4px;text-align:right}
+.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:22px;color:#74839d;font-size:11px}.footer a{color:#9fb4ff;text-decoration:none}.message{font-size:12px;color:var(--muted);margin-top:14px;min-height:18px}.error{color:#ffb0b0}
+@media(max-width:760px){.wrap{padding-top:22px}.top{margin-bottom:32px}.layout{grid-template-columns:1fr}.card{padding:20px}.hero p{font-size:13px}.brand{font-size:17px}.status{font-size:10px}.result-value{font-size:31px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><div class="logo">₮</div><span>SOMFLOW</span></div>
+  <div class="status"><span class="dot"></span><span id="statusText">Rasmiy kunlik kurs</span></div>
+</header>
+<section class="hero">
+  <div class="eyebrow">Official rates · UZS</div>
+  <h1>Valyutani so‘mga aylantir.</h1>
+  <p>Mashhur jahon valyutalari · Rasmiy kurslar · Tez hisob-kitob</p>
+</section>
+<main class="layout">
+  <section class="card">
+    <div class="card-head"><h2>Konvertor</h2><span class="tag">UZS · O‘zbek so‘mi</span></div><p style="color:#94a3bd;font-size:12px;line-height:1.6;margin:-12px 0 20px">Bu rasmiy kunlik kurs. Bankdagi sotib olish/sotish narxi boshqacha bo‘lishi mumkin.</p>
+    <label for="amount">Qancha valyuta?</label>
+    <input class="amount" id="amount" type="number" min="0" step="any" value="100" inputmode="decimal" placeholder="Summani kiriting">
+    <div class="currency-row">
+      <div><label for="currency">Valyutani tanlang</label><div class="select-wrap"><select id="currency">
+        <option value="USD">🇺🇸 AQSH dollari · USD</option><option value="EUR">🇪🇺 Yevro · EUR</option><option value="RUB">🇷🇺 Rossiya rubli · RUB</option><option value="GBP">🇬🇧 Funt sterling · GBP</option><option value="CNY">🇨🇳 Xitoy yuani · CNY</option><option value="JPY">🇯🇵 Yaponiya iyenasi · JPY</option><option value="CHF">🇨🇭 Shveytsariya franki · CHF</option><option value="KZT">🇰🇿 Qozog‘iston tengesi · KZT</option><option value="TRY">🇹🇷 Turkiya lirasi · TRY</option><option value="AED">🇦🇪 BAA dirhami · AED</option><option value="INR">🇮🇳 Hindiston rupiyasi · INR</option><option value="CAD">🇨🇦 Kanada dollari · CAD</option><option value="AUD">🇦🇺 Avstraliya dollari · AUD</option><option value="KRW">🇰🇷 Janubiy Koreya voni · KRW</option><option value="SGD">🇸🇬 Singapur dollari · SGD</option>
+      </select></div></div>
+      <button class="swap" id="swap" title="Valyutani almashtirish" aria-label="Valyutani almashtirish">⇄</button>
+    </div>
+    <div class="result"><div class="result-label">Taxminiy qiymat</div><div class="result-value" id="result">— <span>so‘m</span></div><div class="result-note" id="rateNote">Kurs yuklanmoqda…</div></div>
+    <div class="message" id="message" aria-live="polite"></div>
+  </section>
+  <section class="card">
+    <div class="card-head"><h2>Mashhur valyutalar</h2><span class="tag">UZS / 1 birlik</span></div>
+    <div class="rate-list" id="rateList"></div>
+    <div class="message">Ro‘yxatdagi qiymatlar 1 birlik valyutaning so‘mdagi rasmiy qiymatidir.</div>
+  </section>
+</main>
+<footer class="footer"><span>© <span id="year"></span> SOMFLOW</span><span id="updated">Kurs manbasi: O‘zbekiston Markaziy banki</span><span><a href="https://cbu.uz/uz/arkhiv-kursov-valyut/json/" target="_blank" rel="noopener">Rasmiy kurs API ↗</a> · <a href="https://trustbank.uz/en/services/exchange-rates/" target="_blank" rel="noopener">Bank narxlari ↗</a></span></footer>
+</div>
+<script>
+const API='https://cbu.uz/uz/arkhiv-kursov-valyut/json/';
+const currencies=[
+ {code:'USD',name:'AQSH dollari',flag:'🇺🇸'},{code:'EUR',name:'Yevro',flag:'🇪🇺'},
+ {code:'RUB',name:'Rossiya rubli',flag:'🇷🇺'},{code:'GBP',name:'Funt sterling',flag:'🇬🇧'},
+ {code:'CNY',name:'Xitoy yuani',flag:'🇨🇳'},{code:'JPY',name:'Yaponiya iyenasi',flag:'🇯🇵'},
+ {code:'CHF',name:'Shveytsariya franki',flag:'🇨🇭'},{code:'KZT',name:'Qozog‘iston tengesi',flag:'🇰🇿'},
+ {code:'TRY',name:'Turkiya lirasi',flag:'🇹🇷'},{code:'AED',name:'BAA dirhami',flag:'🇦🇪'},
+ {code:'INR',name:'Hindiston rupiyasi',flag:'🇮🇳'},{code:'CAD',name:'Kanada dollari',flag:'🇨🇦'},
+ {code:'AUD',name:'Avstraliya dollari',flag:'🇦🇺'},{code:'KRW',name:'Janubiy Koreya voni',flag:'🇰🇷'},
+ {code:'SGD',name:'Singapur dollari',flag:'🇸🇬'}
+];
+const $=id=>document.getElementById(id);
+let rates={}, rateDate='', lastFetch=null;
+const money=n=>new Intl.NumberFormat('uz-UZ',{maximumFractionDigits:2}).format(n);
+function renderList(){
+ const shown=['USD','EUR','RUB','GBP','CNY','KZT','TRY'];
+ $('rateList').innerHTML=shown.map(code=>{
+  const c=currencies.find(x=>x.code===code), r=rates[code];
+  return `<div class="rate"><div class="flag">${c.flag}</div><div><div class="rate-name">${c.name}</div><div class="rate-code">${c.code}</div></div><div><div class="rate-value">${r?money(r):'—'} so‘m</div><div class="rate-change">1 ${c.code}</div></div></div>`;
+ }).join('');
+}
+function convert(){
+ const code=$('currency').value, amount=Number($('amount').value), rate=rates[code];
+ if(!Number.isFinite(amount)||amount<0){$('result').innerHTML='Summani tekshiring';$('rateNote').textContent='Musbat son kiriting.';return}
+ if(!rate){$('result').innerHTML='— <span>so‘m</span>';$('rateNote').textContent='Kurs hali mavjud emas.';return}
+ $('result').innerHTML=`${money(amount*rate)} <span>so‘m</span>`;
+ $('rateNote').textContent=`1 ${code} = ${money(rate)} so‘m · Rasmiy kurs sanasi: ${rateDate||'—'}`;
+}
+async function loadRates(){
+ $('statusText').textContent='Kurslar tekshirilmoqda';
+ try{
+  const response=await fetch(API,{cache:'no-store'});
+  if(!response.ok) throw new Error('HTTP '+response.status);
+  const data=await response.json();
+  const next={};
+  for(const item of data){
+   const nominal=Number(item.Nominal)||1, rate=Number(String(item.Rate).replace(',','.'));
+   if(item.Ccy&&Number.isFinite(rate)) next[item.Ccy]=rate/nominal;
+  }
+  if(!Object.keys(next).length) throw new Error('Kurslar topilmadi');
+  rates=next; rateDate=data.find(x=>x.Date)?.Date||new Date().toLocaleDateString('uz-UZ');
+  lastFetch=new Date();
+  $('statusText').textContent='Kurslar yangilandi';
+  $('updated').textContent='Oxirgi tekshiruv: '+lastFetch.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'})+' · Manba: Markaziy bank';
+  $('message').textContent='Rasmiy kurslar muvaffaqiyatli yuklandi.';
+  $('message').classList.remove('error');
+  renderList();convert();
+ }catch(err){
+  $('statusText').textContent='Kursni yuklab bo‘lmadi';
+  $('message').textContent='Internet yoki manba vaqtincha ishlamayapti. Birozdan keyin qayta urinib ko‘ring.';
+  $('message').classList.add('error');
+  if(!lastFetch) $('rateNote').textContent='Kurs olish uchun internet kerak.';
+ }
+}
+$('amount').addEventListener('input',convert);
+$('currency').addEventListener('change',convert);
+$('swap').addEventListener('click',()=>{$('currency').value=$('currency').value==='USD'?'EUR':'USD';convert()});
+$('year').textContent=new Date().getFullYear();
+loadRates();
+setInterval(loadRates,15*60*1000); // Re-checks the source every 15 minutes; the official rate itself usually changes by publication date, not every 15 minutes.
+</script>
+</body>
+</html>
